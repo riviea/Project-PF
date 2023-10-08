@@ -12,6 +12,6 @@ public class PlayerUnitController : UnitController
     {
         Vector2 vec = input.Get<Vector2>();
         CallMoveEvent(vec);
-        clientSystem.SendToServer(input);
+        //clientSystem.SendToServer(input);
     }
 }
