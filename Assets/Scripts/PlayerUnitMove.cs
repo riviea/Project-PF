@@ -20,7 +20,6 @@ public class PlayerUnitMove : MonoBehaviour
         player = GetComponent<Character>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         _controller.OnMoveEvent += Move;
@@ -30,8 +29,9 @@ public class PlayerUnitMove : MonoBehaviour
     {
         _rigidbody.velocity = _direction * _unitSpeed;
 
-        if (_direction != Vector2.zero)
-            ClientSystem.clientSystem.SendToServer(player.GetCharacterInfo(), ClientSystem.PacketType.GAME);
+        //주석 풀기
+        //if (_direction != Vector2.zero)
+            //ClientSystem.clientSystem.SendToServer(player.GetCharacterInfo(), ClientSystem.PacketType.GAME);
     }
 
     void Move(Vector2 input)
