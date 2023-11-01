@@ -11,6 +11,7 @@ using System.Text;
 using System.Net.NetworkInformation;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
+using UnityEngine.InputSystem;
 
 public class ClientSystem : MonoBehaviour
 {
@@ -24,6 +25,14 @@ public class ClientSystem : MonoBehaviour
         MESSAGE = 3,
         GAME = 4
     }
+
+    public enum GameObjectType
+    {
+        PLAYER = 1,
+        AI = 2,
+        PROJECTILE = 3
+    }
+
 
     private Socket clntSock;
     private EndPoint servEP;
@@ -120,20 +129,53 @@ public class ClientSystem : MonoBehaviour
                          3. 본인을 동기화하지 않음 (서버와 위치 오차가 생길 확률이 농후함)
 
                         */
-                        string[] bufferSplited = arrangedBuffer.Split("/");
-                        if (bufferSplited[0] != playerName)
+                        string[] bufferSplited = arrangedBuffer.Split("~");
+
+                        switch ((GameObjectType)int.Parse(bufferSplited[0]))
                         {
-                            GameObject gameObject = GameObject.Find(bufferSplited[0]);
+                            case GameObjectType.PLAYER:
 
-                            if (gameObject == null)
-                            {
-                                gameObject = Resources.Load("Prefabs/NonPlayer") as GameObject;
-                                gameObject = MonoBehaviour.Instantiate(gameObject);
-                                gameObject.name = bufferSplited[0];
-                            }
-                            gameObject.transform.localPosition = new Vector3(float.Parse(bufferSplited[1]), float.Parse(bufferSplited[2]), 0);
+                                if (bufferSplited[2] != playerName)
+                                {
+                                    GameObject gameObject = GameObject.Find(bufferSplited[2]);
+
+                                    if (gameObject == null)
+                                    {
+                                        gameObject = Resources.Load("Prefabs/NonPlayer") as GameObject;
+                                        gameObject = MonoBehaviour.Instantiate(gameObject);
+                                        gameObject.name = bufferSplited[2];
+                                    }
+                                    gameObject.transform.localPosition = new Vector3(float.Parse(bufferSplited[3]), float.Parse(bufferSplited[4]), 0);
+                                }
+
+                                break;
+
+                            case GameObjectType.AI:
+                                break;
+
+                            case GameObjectType.PROJECTILE:
+                                //Ex. 3~Prefabs/Bullet~Yugi~0.1~0.1~0.2~0.2
+
+                                if (bufferSplited[2] != playerName)
+                                {
+                                    Vector2 firePos;
+                                    firePos.x = float.Parse(bufferSplited[3]);
+                                    firePos.y = float.Parse(bufferSplited[4]);
+
+                                    Vector2 mousePos;
+                                    mousePos.x = float.Parse(bufferSplited[5]);
+                                    mousePos.y = float.Parse(bufferSplited[6]);
+
+                                    GameObject projectile = Resources.Load(bufferSplited[1]) as GameObject;
+                                    projectile = MonoBehaviour.Instantiate(projectile);    
+
+                                    Projectile bulletProjectile = projectile.GetComponent<Projectile>();
+
+                                    bulletProjectile.Launch(firePos, mousePos);
+                                }
+
+                                break;
                         }
-
                         break;
 
                     default:

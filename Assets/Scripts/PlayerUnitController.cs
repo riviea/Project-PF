@@ -20,7 +20,20 @@ public class PlayerUnitController : UnitController
         GameObject bullet = Resources.Load("Prefabs/Bullet") as GameObject;
         bullet = MonoBehaviour.Instantiate(bullet);
 
+        ClientSystem.clientSystem.SendToServer(
+
+            ((int)ClientSystem.GameObjectType.PROJECTILE).ToString() + "~" +
+            "Prefabs/Bullet" + "~" +
+            ClientSystem.clientSystem.playerName + "~" + 
+            (firePos.x).ToString() + "~" +
+            (firePos.y).ToString() + "~" +
+            (mousePos.x).ToString() + "~" +
+            (mousePos.y).ToString()
+
+            ,ClientSystem.PacketType.GAME);
+
         Projectile bulletProjectile = bullet.GetComponent<Projectile>();
+
         bulletProjectile.Launch(firePos, mousePos);
     }
 }
