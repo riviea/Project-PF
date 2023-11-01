@@ -17,8 +17,6 @@ public class PlayerUnitController : UnitController
         Vector2 firePos = GameObject.Find("FirePoint").transform.position;
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
-        Debug.Log(firePos + " / " + mousePos);
-
         GameObject bullet = Resources.Load("Prefabs/Bullet") as GameObject;
         bullet = MonoBehaviour.Instantiate(bullet);
 

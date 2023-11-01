@@ -33,7 +33,11 @@ public class Projectile : MonoBehaviour
     {
         //firePos로 Projectile 위치를 초기화
         transform.localPosition = firePos;
-        
+
+        //Projectile을 mousePos 방향으로 회전
+        float angle = Mathf.Atan2(mousePos.y - firePos.y, mousePos.x - firePos.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+
         //마우스 위치와 발사 위치를 통해 방향을 얻는다
         Vector2 direction = (mousePos - firePos).normalized;
 

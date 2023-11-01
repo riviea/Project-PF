@@ -6,6 +6,6 @@ public class Player : MonoBehaviour
 {
     private void Awake()
     {
-        //this.name = ClientSystem.clientSystem.playerName;
+        this.name = ClientSystem.clientSystem.playerName;
     }
 }
